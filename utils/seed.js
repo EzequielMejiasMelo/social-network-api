@@ -33,6 +33,13 @@ connection.once('open', async () => {
             thoughtText: thought,
             username: username,
         })
+
+        let user_thought = await Thought.findOne({username: username});
+
+        await User.findOneAndUpdate(
+            {username: username},
+            {$addToSet: {thoughts: user_thought._id}}
+        )
     }
 
     console.info('Seeding finished');
