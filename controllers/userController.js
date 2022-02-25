@@ -27,7 +27,10 @@ module.exports = {
     createUser(req, res){
         User.create(req.body)
         .then(user => res.json(user))
-        .catch(err => res.status(500).json(err));
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });
     },
     //Delete user
     deleteUser(req, res){
