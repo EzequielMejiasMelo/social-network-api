@@ -16,7 +16,12 @@ const userSchema = new Schema(
             unique: true,
             //mongoose valid email address
         },
-        thoughts: [thoughtSchema],
+        thoughts: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Thought',
+            }
+        ],
         friends: [
             {
                 type: Schema.Types.ObjectId,
@@ -25,6 +30,10 @@ const userSchema = new Schema(
         ],
     }
 );
+
+userSchema.virtual('friendCount').get(function () {
+    return this.friends.length;
+});
 
 const User = model('users', userSchema);
 
