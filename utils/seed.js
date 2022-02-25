@@ -26,17 +26,15 @@ connection.once('open', async () => {
     await User.collection.insertMany(users);
 
     for (let i=0; i < 10; i++){
-        await User.find({username: usernames[i]}).then((user) => {
-            let thought = thoughts[i];
-            let username = user.username;
-            await Thought.collection.insertOne({
-                thoughtText: thought,
-                username: username,
-            })
+        let user = await User.findOne({username: usernames[i]});
+        let thought = thoughts[i];
+        let username = user.username;
+        await Thought.collection.insertOne({
+            thoughtText: thought,
+            username: username,
         })
     }
 
-    console.log(users);
     console.info('Seeding finished');
     process.exit(0);
 });

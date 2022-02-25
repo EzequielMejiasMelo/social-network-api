@@ -37,6 +37,4 @@ const thoughts = [
     'I cannot wait to be a developer!'
 ];
 
-
-
 module.exports = {usernames, emails, thoughts};
