@@ -1,4 +1,4 @@
-const {User, Thought} = require('../models');
+const {User} = require('../models');
 
 module.exports = {
     //All users
@@ -33,7 +33,48 @@ module.exports = {
     deleteUser(req, res){
         User.findOneAndRemove({_id: req.params.userId})
         .then((user) => {
-            !user ? res.status(404).json({message: 'No user with that ID'}) : res.json(user);
+            user ? res.json(user) : res.status(404).json({message: 'No user with that ID'})
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+    },
+    //Update User
+    updateUser(req, res){
+        User.updateOne({_id: req.params.userId}, req.body)
+        .then((user) => {
+            user ? res.json(user) : res.status(404).json({message: 'No user with that ID'})
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+    },
+    //Add friend
+    addFriend(req, res){
+        User.findOneAndUpdate(
+            {_id: req.params.userId},
+            {$addToSet: {friends: req.params.friendId}},
+            {runValidators: true, new: true}
+        )
+        .then((user) => {
+            user ? res.json(user) : res.status(404).json({message: 'No user with that ID'})
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+    },
+    //Remove friend
+    removeFriend(req, res){
+        User.findOneAndRemove(
+            {_id: req.params.userId},
+            {$pull: {friends: req.params.friendId}},
+            {runValidators: true, new: true}
+        )
+        .then((user) => {
+            user ? res.json(user) : res.status(404).json({message: 'No user with that ID'})
         })
         .catch((err) => {
             console.log(err);
